@@ -70,3 +70,5 @@
 
 * `GET /api/dashboard`:
     * No request body or parameters.  The user's data is retrieved from the authentication middleware.
+ 
+- I can't finished the full project .. need some more tiem to complete it and emplement more options
