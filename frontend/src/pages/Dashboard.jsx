@@ -9,13 +9,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [category, setCategory] = useState("");
+  const [status, setStatus] = useState("");
   const [data, updateData] = useState({
     tasks: [],
     currentPage: 1,
     totalPages: 0,
     totalTasks: 0,
   });
-
   const [userdata, setUserData] = useState({
     message: "",
     user: {
@@ -36,11 +37,11 @@ const Dashboard = () => {
           credentials: "include",
         });
         if (res.status === 401 || res.status === 403) {
-          console.log(res)
+          console.log(res);
           navigate("/login"); // 👈 redirect to login if not authorized
         }
         const data = await res.json();
-        console.log(data)
+        console.log(data);
         setUserData({
           message: data.message,
           user: {
@@ -60,6 +61,10 @@ const Dashboard = () => {
     // move this outside useEffect
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fetchFilteredTasks();
+  }, [category, status]);
 
   const fetchData = async () => {
     try {
@@ -87,6 +92,25 @@ const Dashboard = () => {
         totalPages: 0,
         totalTasks: 0,
       });
+    }
+  };
+
+  const fetchFilteredTasks = async () => {
+    try {
+      const query = new URLSearchParams();
+      if (category !== "all") query.append("category", category);
+      if (status !== "all") query.append("status", status);
+
+      const res = await fetch(`/api/tasks/filter?${query.toString()}`);
+      const data = await res.json();
+      updateData({
+        tasks: data.tasks,
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        totalTasks: data.totalTasks,
+      });
+    } catch (error) {
+      console.error("Error fetching filtered task", error);
     }
   };
 
@@ -119,7 +143,7 @@ const Dashboard = () => {
 
       <div className="min-h-screen bg-gray-200">
         <Nav data={userdata} />
-        <div className="relative max-w-11/12 md:max-w-3xl lg:max-w-11/12 h-[600px] md:h-[700px] bg-white mx-auto -mt-16 z-20 p-6 rounded-xl shadow-md">
+        <div className="relative overflow-y-auto max-w-11/12 md:max-w-3xl lg:max-w-11/12 h-[600px] md:h-[700px] bg-white mx-auto -mt-16 z-20 p-6 rounded-xl shadow-md">
           <div className="flex w-full justify-between">
             {/* all task and dropdown part */}
             <h3 className="font-semibold text-1xl md:text-3xl ">
@@ -131,6 +155,7 @@ const Dashboard = () => {
                   name="category"
                   id="category"
                   className="outline-0 border-gray-300 border-2 px-0.5 md:px-5 py-2 md:py-2 rounded-lg text-sm md:text-lg"
+                  onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="" disabled selected hidden>
                     Select task category
@@ -150,7 +175,12 @@ const Dashboard = () => {
                   <option value="friends" className="capitalize">
                     friends
                   </option>
-                  <option value="meditation" className="capitalize"></option>
+                  <option value="meditation" className="capitalize">
+                    meditation
+                  </option>
+                  <option value="all" className="capitalize">
+                    all
+                  </option>
                 </select>
               </div>
               <div>
@@ -158,6 +188,7 @@ const Dashboard = () => {
                   name="status"
                   id="status"
                   className="outline-0 border-gray-300 border-2 px-3 md:px-5 py-1 md:py-2 capitalize rounded-lg text-sm md:text-lg"
+                  onChange={(e) => setStatus(e.target.value)}
                 >
                   <option value="all">all task</option>
                   <option value="ongoing">ongoing</option>
@@ -166,23 +197,28 @@ const Dashboard = () => {
                   <option value="done">done</option>
                 </select>
               </div>
-              <button onClick={()=>{navigate('/newtask')}} className="capitalize bg-[#60E5AE] px-4 py-2 rounded-lg flex gap-2 cursor-pointer">
+              <button
+                onClick={() => {
+                  navigate("/newtask");
+                }}
+                className="capitalize bg-[#60E5AE] px-4 py-2 rounded-lg flex gap-2 cursor-pointer"
+              >
                 {" "}
-                <img src={fileLogo} alt="img"/> add new Task
+                <img src={fileLogo} alt="img" /> add new Task
               </button>
             </div>
           </div>
           {/* task list part */}
-          {data.totalTasks !== 0 ? (
+          {data.tasks.length !== 0 ? (
             <div className="w-full grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  h-[400px] md:h-[570px] mt-10 mb-4 ">
               {/* card */}
               {data.tasks.map((task) => {
                 return (
-                  <div className="card w-12/12 md:w-12/12  rounded-2xl shadow-lg shadow-gray-300 h-[200px]">
-                    <div
-                      key={task._id}
-                      className="flex justify-between px-3 py-2"
-                    >
+                  <div
+                    key={task._id}
+                    className="card w-12/12 md:w-12/12  rounded-2xl shadow-lg shadow-gray-300 h-[200px]"
+                  >
+                    <div className="flex justify-between px-3 py-2">
                       <div className="flex items-center gap-4">
                         <img src="/assets/taskIco.svg" alt="taskimg" />
                         <h3 className="text-xl font-semibold capitalize cursor-pointer">
