@@ -73,7 +73,7 @@
 
 ## How To Run Locally :
 *To run this is your localsystem you need `node` installed in yor system. thee follow those steps:*
-- **first go to the front-end folder and run :**
+- **first go to the `front-end` folder and run :**
      ```bash
      npm i
      npm run dev
