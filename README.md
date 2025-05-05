@@ -70,5 +70,19 @@
 
 * `GET /api/dashboard`:
     * No request body or parameters.  The user's data is retrieved from the authentication middleware.
+
+## How To Run Locally :
+*To run this is your localsystem you need `node` installed in yor system. thee follow those steps:*
+- **first go to the front-end folder and run :**
+     ```bash
+     npm i
+     npm run dev
+     ```
+- **Now open another terminal on the `backend` folder and run:
+    ```bash
+    npm i
+    npm run dev
+    ```
+- Now if everything is runing perfectly then you can use the fullstack project on your local system
  
 - I can't finished the full project .. need some more tiem to complete it and emplement more options
