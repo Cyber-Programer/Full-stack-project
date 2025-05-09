@@ -37,11 +37,9 @@ const Dashboard = () => {
           credentials: "include",
         });
         if (res.status === 401 || res.status === 403) {
-          console.log(res);
           navigate("/login"); // 👈 redirect to login if not authorized
         }
         const data = await res.json();
-        console.log(data);
         setUserData({
           message: data.message,
           user: {
@@ -221,7 +219,12 @@ const Dashboard = () => {
                     <div className="flex justify-between px-3 py-2">
                       <div className="flex items-center gap-4">
                         <img src="/assets/taskIco.svg" alt="taskimg" />
-                        <h3 className="text-xl font-semibold capitalize cursor-pointer">
+                        <h3
+                          className="text-xl font-semibold capitalize cursor-pointer"
+                          onClick={() => {
+                            navigate("/showTask/" + task._id);
+                          }}
+                        >
                           {task.title}
                         </h3>
                       </div>

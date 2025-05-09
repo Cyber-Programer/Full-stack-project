@@ -27,7 +27,7 @@ export default function LoginForm() {
         console.log(data);
         data.redirect ? navigate(data.redirect) : "";
       } catch (error) {
-        console.error("Auth status error: ", error.message);
+        console.error("Auth status error: ", error);
       }
     }
     ckAuth();

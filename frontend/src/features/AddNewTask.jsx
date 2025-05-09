@@ -98,12 +98,13 @@ const AddNewTask = () => {
     }
   };
 
+
   return (
     <div className="min-h-screen bg-gray-200">
       <ToastContainer />
       <Nav data={userdata} />
 
-      <div className="relative max-w-lg md:max-w-3xl lg:max-w-11/12 h-auto bg-white mx-auto -mt-16 z-20 p-6 rounded-xl shadow-md">
+      <div className="relative max-w-lg md:max-w-3xl mb-10 h-fit md:h-[700px]  lg:max-w-11/12 bg-white mx-auto -mt-16 z-20 p-6 rounded-xl shadow-md">
         <div className="w-full flex justify-between">
           <h1 className="capitalize text-2xl font-medium">add your new task</h1>
           <button
@@ -114,7 +115,7 @@ const AddNewTask = () => {
           </button>
         </div>
 
-        <form className="mt-5" onSubmit={addNewTask}>
+        <form className="mt-5 flex flex-col gap-5 h-full " onSubmit={addNewTask}>
           <label htmlFor="title" className="font-medium mt-5 mb-1 block">
             Task Name
           </label>
